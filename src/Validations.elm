@@ -1,7 +1,7 @@
 module Validations
     exposing
         ( ValidationResult(Valid, Err)
-        , beginValidation
+        , begin
         , validatePresenceOf
         , validateLengthOf
         , validateMatchOf
@@ -18,7 +18,7 @@ module Validations
 
 # Functions
 
-@docs beginValidation
+@docs begin
 @docs validatePresenceOf
 @docs validateLengthOf
 @docs validateMatchOf
@@ -29,7 +29,9 @@ module Validations
 import Regex exposing (..)
 
 
-{-| A Validation result behaves very similarly to a Result, the main difference is that you can have an aggregation of all the errors instead of a single one.
+{-| A Validation result behaves very similarly to a Result,
+the main difference is that on an error state keep sending the value
+and you can have an aggregation of all the errors instead of a single one.
 -}
 type ValidationResult value errorMsg
     = Valid value
@@ -54,17 +56,17 @@ validate test errorMessage currentResult =
 
 {-| Wraps value in a ValidationResult.
 
-    (beginValidation {password = "somepass"}) == Valid {password = "somepass"}
+    (Validations.begin {password = "somepass"}) == Valid {password = "somepass"}
 
 -}
-beginValidation : value -> ValidationResult value errorMsg
-beginValidation value =
+begin : value -> ValidationResult value errorMsg
+begin value =
     Valid value
 
 
 {-| Validates the presence of a string value.
 
-    (beginValidation {password = "somepass"})
+    (Validations.begin {password = "somepass"})
     |> validatePresenceOf .password "Password is not present"
 
 -}
@@ -78,7 +80,7 @@ validatePresenceOf f errorMessage currentResult =
 
 {-| Validates the length of a string value.
 
-    (beginValidation {password = "somepass"})
+    (Validations.begin {password = "somepass"})
     |> validateLengthOf .password 8 "Password is too short" == Err {password = "somepass} ["Password is too short"]
 
 -}
@@ -92,7 +94,7 @@ validateLengthOf f length errorMessage currentResult =
 
 {-| Validates equality between two values.
 
-    (beginValidation {password = "somepass"})
+    (Validations.begin {password = "somepass"})
     |> equals 8 8 "Values are not the same" == Err {password = "somepass} ["Values are not the same"]
 
 -}
@@ -103,7 +105,7 @@ equals left right errorMessage currentResult =
 
 {-| Validates a regex match of a value.
 
-    (beginValidation {password = "somepass"})
+    (Validations.begin {password = "somepass"})
     |> validateMatchOf .password (regex "somepass") "Not in regex" == Err {password = "somepass} ["Not in regex"]
 
 -}

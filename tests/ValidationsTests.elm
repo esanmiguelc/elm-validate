@@ -25,15 +25,15 @@ passwordError =
 
 
 validateEmailPresence credentials =
-    (Val.validatePresenceOf .email emailError (Val.beginValidation credentials))
+    (Val.validatePresenceOf .email emailError (Val.begin credentials))
 
 
 validatePasswordPresence credentials =
-    (Val.validatePresenceOf .password passwordError (Val.beginValidation credentials))
+    (Val.validatePresenceOf .password passwordError (Val.begin credentials))
 
 
 validatePasswordLength credentials =
-    (Val.validateLengthOf .password 8 "Password too short" (Val.beginValidation credentials))
+    (Val.validateLengthOf .password 8 "Password too short" (Val.begin credentials))
 
 
 tests : Test
@@ -78,7 +78,7 @@ tests =
                         (Credentials "" "")
                 in
                     Expect.equal (Val.Err credentials [ emailError, passwordError ])
-                        ((Val.beginValidation credentials)
+                        ((Val.begin credentials)
                             |> (Val.validatePresenceOf .email emailError)
                             |> (Val.validatePresenceOf .password passwordError)
                         )
@@ -88,7 +88,7 @@ tests =
                     credentials =
                         (Credentials "" "password")
                 in
-                    ((Val.beginValidation credentials)
+                    ((Val.begin credentials)
                         |> (Val.validatePresenceOf .email emailError)
                         |> (Val.validatePresenceOf .password passwordError)
                     )
@@ -116,7 +116,7 @@ tests =
                         (Credentials "" "password")
                 in
                     Expect.equal (Val.Valid credentials)
-                        (Val.equals 8 (String.length credentials.password) "Nope" (Val.beginValidation credentials))
+                        (Val.equals 8 (String.length credentials.password) "Nope" (Val.begin credentials))
         , test "is not valid if it is different integers" <|
             \() ->
                 let
@@ -124,7 +124,7 @@ tests =
                         (Credentials "" "password")
                 in
                     Expect.equal (Val.Err credentials [ "Nope" ])
-                        (Val.equals 9 (String.length credentials.password) "Nope" (Val.beginValidation credentials))
+                        (Val.equals 9 (String.length credentials.password) "Nope" (Val.begin credentials))
         , test "is valid if it is equal strings" <|
             \() ->
                 let
@@ -132,7 +132,7 @@ tests =
                         (Credentials "" "password")
                 in
                     Expect.equal (Val.Valid credentials)
-                        (Val.equals "password" credentials.password "Nope" (Val.beginValidation credentials))
+                        (Val.equals "password" credentials.password "Nope" (Val.begin credentials))
         , test "is not valid if it is different strings" <|
             \() ->
                 let
@@ -140,7 +140,7 @@ tests =
                         (Credentials "" "password")
                 in
                     Expect.equal (Val.Err credentials [ "Nope" ])
-                        (Val.equals "passwor" credentials.password "Nope" (Val.beginValidation credentials))
+                        (Val.equals "passwor" credentials.password "Nope" (Val.begin credentials))
         , test "is valid if it matches format" <|
             \() ->
                 let
@@ -148,5 +148,5 @@ tests =
                         (Credentials "" "password")
                 in
                     Expect.equal (Val.Valid credentials)
-                        (Val.validateMatchOf .password (regex "password") "Nope" (Val.beginValidation credentials))
+                        (Val.validateMatchOf .password (regex "password") "Nope" (Val.begin credentials))
         ]
