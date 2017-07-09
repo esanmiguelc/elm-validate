@@ -65,7 +65,7 @@ beginValidation value =
 {-| Validates the presence of a string value.
 
     (beginValidation {password = "somepass"})
-    |> validatePresenceOf .password "Password is too short"
+    |> validatePresenceOf .password "Password is not present"
 
 -}
 validatePresenceOf : (a -> String) -> String -> ValidationResult a -> ValidationResult a
