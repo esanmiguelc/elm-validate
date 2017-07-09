@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "test": "elm test",
-    "publish-package": "elm package publish",
+    "pubpack": "elm package publish",
+    "bump": "elm package bump",
     "generate-documentation": "elm make src/Validations.elm --docs=documentation.json"
   },
   "dependencies": {
