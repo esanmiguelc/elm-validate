@@ -1,6 +1,7 @@
 # elm-validate
 
 Link to package: http://package.elm-lang.org/packages/esanmiguelc/elm-validate
+
 Link to repository: https://github.com/esanmiguelc/elm-validate
 
 Validation library inspired by ecto changeset validations. The idea behind this project is to be able to concatenate validations and ultimately get a `ValidationResult` which provides all of the errors produced by the pipeline, which can then be used in any desired manner.
