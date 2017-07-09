@@ -1,5 +1,7 @@
 # elm-validate
 
+[![Build Status](https://travis-ci.org/esanmiguelc/elm-validate.svg?branch=master)](https://travis-ci.org/esanmiguelc/elm-validate)
+
 Link to package: http://package.elm-lang.org/packages/esanmiguelc/elm-validate
 
 Link to repository: https://github.com/esanmiguelc/elm-validate
