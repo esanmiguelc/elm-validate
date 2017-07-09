@@ -16,7 +16,7 @@ module Validations
 @docs ValidationResult
 
 
-# Functions:
+# Functions
 
 @docs beginValidation
 @docs validatePresenceOf
