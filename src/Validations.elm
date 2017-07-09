@@ -31,12 +31,12 @@ import Regex exposing (..)
 
 {-| A Validation result behaves very similarly to a Result, the main difference is that you can have an aggregation of all the errors instead of a single one.
 -}
-type ValidationResult a
-    = Valid a
-    | Err a (List String)
+type ValidationResult value errorMsg
+    = Valid value
+    | Err value (List errorMsg)
 
 
-validate : (a -> Bool) -> String -> ValidationResult a -> ValidationResult a
+validate : (value -> Bool) -> errorMsg -> ValidationResult value errorMsg -> ValidationResult value errorMsg
 validate test errorMessage currentResult =
     case currentResult of
         Valid value ->
@@ -57,7 +57,7 @@ validate test errorMessage currentResult =
     (beginValidation {password = "somepass"}) == Valid {password = "somepass"}
 
 -}
-beginValidation : a -> ValidationResult a
+beginValidation : value -> ValidationResult value errorMsg
 beginValidation value =
     Valid value
 
@@ -68,7 +68,7 @@ beginValidation value =
     |> validatePresenceOf .password "Password is not present"
 
 -}
-validatePresenceOf : (a -> String) -> String -> ValidationResult a -> ValidationResult a
+validatePresenceOf : (value -> String) -> errorMsg -> ValidationResult value errorMsg -> ValidationResult value errorMsg
 validatePresenceOf f errorMessage currentResult =
     validate
         (\value -> String.isEmpty (f value))
@@ -82,7 +82,7 @@ validatePresenceOf f errorMessage currentResult =
     |> validateLengthOf .password 8 "Password is too short" == Err {password = "somepass} ["Password is too short"]
 
 -}
-validateLengthOf : (a -> String) -> Int -> String -> ValidationResult a -> ValidationResult a
+validateLengthOf : (value -> String) -> Int -> errorMsg -> ValidationResult value errorMsg -> ValidationResult value errorMsg
 validateLengthOf f length errorMessage currentResult =
     validate
         (\value -> String.length (f value) < length)
@@ -96,7 +96,7 @@ validateLengthOf f length errorMessage currentResult =
     |> equals 8 8 "Values are not the same" == Err {password = "somepass} ["Values are not the same"]
 
 -}
-equals : a -> a -> String -> ValidationResult b -> ValidationResult b
+equals : a -> a -> errorMsg -> ValidationResult value errorMsg -> ValidationResult value errorMsg
 equals left right errorMessage currentResult =
     validate (\_ -> not <| left == right) errorMessage currentResult
 
@@ -107,7 +107,7 @@ equals left right errorMessage currentResult =
     |> validateMatchOf .password (regex "somepass") "Not in regex" == Err {password = "somepass} ["Not in regex"]
 
 -}
-validateMatchOf : (a -> String) -> Regex -> String -> ValidationResult a -> ValidationResult a
+validateMatchOf : (value -> String) -> Regex -> errorMsg -> ValidationResult value errorMsg -> ValidationResult value errorMsg
 validateMatchOf f re errorMessage currentResult =
     validate
         (\value -> not <| contains re (f value))
