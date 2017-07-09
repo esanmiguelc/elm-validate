@@ -11,12 +11,12 @@ module Validations
 {-| This library is inspired by ecto changeset validations
 
 
-# Result Context
+# Type and constructors
 
 @docs ValidationResult
 
 
-# Functions
+# Chaining
 
 @docs begin
 @docs validatePresenceOf
